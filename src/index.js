@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import ReactDom from 'react-dom'
 import './style.css'
 const data = [{
@@ -14,24 +14,33 @@ const data = [{
     id: 3,
 },
 ]
-const idChecked = (checked = [], id) =>{
+const idChecked = (id) =>{
+    let checked = []
     const checkedId = checked?.includes(id) ?
     checked?.filter(item => item !== id) :
-    [...App(checked ?? []), id]
+    [...(checked ?? []), id]
     return checkedId
 }
 function App() {
+    const [state, setState] = useState('')
+    function CheckboxHandler(e){
+       let newCheckedId = idChecked(e.target.value)
+       setState(...[newCheckedId])
+    }
     return (
         <div className='App'>
-            {data.map(i => (
+            {data.map(ID => (
                 <div>
                 <input type="checkbox"
-                    key={i.id}
-                    id={i.item}
+                    key={ID.id}
+                    id={ID.item}
+                    value={ID.item}
+                    onChange={CheckboxHandler}
                 />
-                <label for={i.item}/>
+                <label for={ID.item}/>{ID.item}<label/>
                 </div>
             ))}
+            <div>selected items:{state}</div>
         </div>
     )
 }
